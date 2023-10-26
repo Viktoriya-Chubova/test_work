@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Services\GitHubWrapper;
+use App\Services\GithubWrapper;
 use App\Services\GitService;
-use App\Services\IGitService;
-use App\Services\IGitWrapper;
+use App\Services\Interfaces\IGitService;
+use App\Services\Interfaces\IGitWrapper;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->scoped(IGitWrapper::class, function (Application $app) {
-            return new GitHubWrapper();
+            return new GithubWrapper();
         });
 
         $this->app->scoped(IGitService::class, function (Application $app) {

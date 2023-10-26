@@ -2,43 +2,45 @@
 
 namespace App\Services;
 
-use App\Models\github_project;
+use App\Models\GithubProject;
 use App\Models\search;
+use App\Services\Interfaces\IGitWrapper;
 
-interface IGitService
+class GitService implements Interfaces\IGitService
 {
-    public function getProjects($query, $perPage, $page);
+    public IGitWrapper $gitWrapper;
 
-    public function delete($query);
-}
-
-class GitService implements IGitService
-{
-    public $gitWrapper;
+    /**
+     * @param IGitWrapper $gitWrapper
+     */
     public function __construct(IGitWrapper $gitWrapper)
     {
         $this->gitWrapper = $gitWrapper;
     }
 
 
+    /**
+     * @param $query
+     * @param $perPage
+     * @param $page
+     * @return void
+     */
     public function getProjects($query, $perPage, $page)
     {
+        $response = null;
         $page -= 1;
-
-
         if (isset($query)) {
             $search_data = search::where('search_text', $query)->first();
 
             if (isset($search_data->id)) {
-                $response = github_project::where('search_id',  $search_data->id)->skip($perPage * $page)->take($perPage)->get();
+                $response = GithubProject::where('search_id', $search_data->id)->skip($perPage * $page)->take($perPage)->get();
                 search::where('id', $search_data->id)
                     ->update([
                         'updated_at' => date('Y-m-d H:i:s', time())
                     ]);
-                return $response;
+
             } else {
-                $result = $this->gitWrapper->getProjects($query, $perPage, $page);
-                $projectItems = json_decode($result)->items;
+                $projectItems = json_decode($this->gitWrapper->getProjects($query, $perPage, $page))->items;
 
                 search::insert([
                     'search_text' => $query,
@@ -47,7 +49,7 @@ class GitService implements IGitService
                 ]);
                 $search = search::where('search_text', $query)->first();
                 foreach ($projectItems as $item) {
-                    github_project::insert([
+                    GithubProject::insert([
                         'search_id' => $search->id,
                         'name' => $item->name,
                         'author' => $item->owner->login,
@@ -59,17 +61,22 @@ class GitService implements IGitService
                     ]);
                 }
 
-                $response = github_project::where('search_id',  $search->id)->get();
-                return $response;
+                $response = GithubProject::where('search_id', $search->id)->get();
+
             }
         }
+        return $response;
     }
 
-    public function delete($query)
+    /**
+     * @param $query
+     * @return void
+     */
+    public function delete($query): void
     {
         $search_data = search::where('id', $query['id'])->first();
         if (isset($search_data->id)) {
-            github_project::where('search_id',  $search_data->id)->delete();
+            GithubProject::where('search_id',  $search_data->id)->delete();
             search::where('id',  $search_data->id)->delete();
         }
     }

@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/show_search',  [GitHubController::class, 'show_search']);
+Route::get('/show_search',  [GitHubController::class, 'showSearch']);
 
 Route::get('/api/find',  [GitApiController::class, 'show']);
 Route::post('/api/find',  [GitApiController::class, 'show']);

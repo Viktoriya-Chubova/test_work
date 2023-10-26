@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\IGitService;
+use App\Services\Interfaces\IGitService;
 use Illuminate\Http\Request;
 
 class GitApiController extends Controller

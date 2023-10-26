@@ -2,16 +2,19 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
-interface IGitWrapper
+class GithubWrapper implements Interfaces\IGitWrapper
 {
-    public function getProjects($query, $perPage, $page);
-}
 
-class GitHubWrapper implements IGitWrapper
-{
-    public function getProjects($query, $perPage, $page)
+    /**
+     * @param $query
+     * @param $perPage
+     * @param $page
+     * @return Response
+     */
+    public function getProjects($query, $perPage, $page): Response
     {
         $url = 'https://api.github.com/search/repositories?q=' . $query;
 
@@ -22,7 +25,6 @@ class GitHubWrapper implements IGitWrapper
             $url .= '&page=' . $page;
         }
 
-        $response = Http::get($url);
-        return $response;
+        return Http::get($url);
     }
 }

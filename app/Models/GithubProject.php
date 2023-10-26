@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
-class github_project extends Model
+//GithubProject
+class GithubProject extends Model
 {
     protected $table = 'github_project';
     
