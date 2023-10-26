@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\GitApiController;
+use App\Http\Controllers\GitHubController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,4 +19,11 @@ Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
 
-require __DIR__.'/auth.php';
+
+Route::get('/show_search',  [GitHubController::class, 'show_search']);
+
+Route::get('/api/find',  [GitApiController::class, 'show']);
+Route::post('/api/find',  [GitApiController::class, 'show']);
+Route::delete('/api/find/{id}',  [GitApiController::class, 'delete']);
+
+require __DIR__ . '/auth.php';
