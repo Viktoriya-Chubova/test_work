@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GithubProject;
-use App\Models\search;
+use App\Models\Search;
 use App\Services;
 use App\Services\Interfaces\IGitService;
 use App\Services\Interfaces\IGitWrapper;

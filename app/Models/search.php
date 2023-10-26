@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class search extends Model
+class Search extends Model
 {
     protected $table = 'search';
     
